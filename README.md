@@ -1,6 +1,6 @@
 # Task-Flow
 
-A single-user task manager built for the **Acme AI Fellowship — Junior Full-Stack Developer** assessment.
+A single-user task manager built for the **Acme AI Fellowship - Junior Full-Stack Developer** assessment.
 
 Task-Flow pairs a Next.js App Router frontend with an Express + TypeScript REST API, persisting data in PostgreSQL (Neon) through Prisma. It covers full CRUD, runtime validation on both layers, status filtering, priority sorting, due dates with overdue highlighting, and automated database-backed integration tests.
 
@@ -36,7 +36,7 @@ Task-Flow lets a user create, edit, complete, and delete personal tasks from a r
 **Scope decisions**
 
 - PostgreSQL is provided by **Neon** using a direct (non-pooled) connection string. No Docker is required.
-- Any standard PostgreSQL connection string works, including a local server — this is the reviewer fallback.
+- Any standard PostgreSQL connection string works, including a local server - this is the reviewer fallback.
 - No live deployment is claimed; the application runs locally.
 - The database schema, migrations, and seed data are committed so an evaluator can start in a few commands.
 
@@ -74,18 +74,18 @@ Task-Flow lets a user create, edit, complete, and delete personal tasks from a r
 
 ## Tech Stack
 
-| Layer | Choice | Version |
-| :--- | :--- | :--- |
-| Frontend | Next.js App Router + React | `15.5.28` / `19.3.1` |
-| Language | TypeScript | `5.9.3` |
-| Styling | Tailwind CSS + custom CSS | `3.4.19` |
-| Icons | lucide-react | `1.60.0` |
-| Backend | Node.js + Express | Node 20+ / `5.3.0` |
-| ORM | Prisma + @prisma/client | `6.19.3` |
-| Validation | Zod | `4.6.7` |
-| Database | PostgreSQL (Neon) | 16+ |
-| Tests | Vitest + Supertest + tsx | `3.2.7` / `7.3.1` / `4.23.15` |
-| Linting | ESLint (flat config backend, Next config frontend) | `9.x` / `8.x` |
+| Layer      | Choice                                             | Version                       |
+| :--------- | :------------------------------------------------- | :---------------------------- |
+| Frontend   | Next.js App Router + React                         | `15.5.28` / `19.3.1`          |
+| Language   | TypeScript                                         | `5.9.3`                       |
+| Styling    | Tailwind CSS + custom CSS                          | `3.4.19`                      |
+| Icons      | lucide-react                                       | `1.60.0`                      |
+| Backend    | Node.js + Express                                  | Node 20+ / `5.3.0`            |
+| ORM        | Prisma + @prisma/client                            | `6.19.3`                      |
+| Validation | Zod                                                | `4.6.7`                       |
+| Database   | PostgreSQL (Neon)                                  | 16+                           |
+| Tests      | Vitest + Supertest + tsx                           | `3.2.7` / `7.3.1` / `4.23.15` |
+| Linting    | ESLint (flat config backend, Next config frontend) | `9.x` / `8.x`                 |
 
 ---
 
@@ -122,7 +122,14 @@ All responses use one envelope:
 ```
 
 ```json
-{ "success": false, "error": { "code": "VALIDATION_ERROR", "message": "Validation failed", "details": [] } }
+{
+  "success": false,
+  "error": {
+    "code": "VALIDATION_ERROR",
+    "message": "Validation failed",
+    "details": []
+  }
+}
 ```
 
 ---
@@ -310,16 +317,16 @@ The committed migration is generated SQL, so no shadow database privileges are r
 
 ## Environment Variables
 
-| File | Variable | Required | Description |
-| :--- | :--- | :--- | :--- |
-| `backend/.env` | `PORT` | No (default `5000`) | API port |
-| `backend/.env` | `DATABASE_URL` | Yes | PostgreSQL connection string |
-| `backend/.env` | `CORS_ORIGIN` | No (default `http://localhost:3000`) | Allowed frontend origin |
-| `backend/.env` | `NODE_ENV` | No (default `development`) | `development` \| `test` \| `production` |
-| `backend/.env.test` | `DATABASE_URL` | Yes for tests | Same database with `&schema=test` |
-| `frontend/.env.local` | `NEXT_PUBLIC_API_URL` | No (default `http://localhost:5000`) | Backend base URL |
+| File                  | Variable              | Required                             | Description                             |
+| :-------------------- | :-------------------- | :----------------------------------- | :-------------------------------------- |
+| `backend/.env`        | `PORT`                | No (default `5000`)                  | API port                                |
+| `backend/.env`        | `DATABASE_URL`        | Yes                                  | PostgreSQL connection string            |
+| `backend/.env`        | `CORS_ORIGIN`         | No (default `http://localhost:3000`) | Allowed frontend origin                 |
+| `backend/.env`        | `NODE_ENV`            | No (default `development`)           | `development` \| `test` \| `production` |
+| `backend/.env.test`   | `DATABASE_URL`        | Yes for tests                        | Same database with `&schema=test`       |
+| `frontend/.env.local` | `NEXT_PUBLIC_API_URL` | No (default `http://localhost:5000`) | Backend base URL                        |
 
-`.env`, `.env.local`, and `.env.test` are gitignored. Only `*.example` files are committed — **never commit real credentials**.
+`.env`, `.env.local`, and `.env.test` are gitignored. Only `*.example` files are committed - **never commit real credentials**.
 
 ---
 
@@ -327,16 +334,16 @@ The committed migration is generated SQL, so no shadow database privileges are r
 
 From the repository root:
 
-| Script | Description |
-| :--- | :--- |
-| `npm run dev` | Run backend and frontend together |
-| `npm run dev:backend` | Run only the API (`tsx watch`) |
-| `npm run dev:frontend` | Run only the Next.js dev server |
-| `npm run build` | Production build for backend (`tsc`) and frontend (`next build`) |
-| `npm test` | Backend integration tests (Vitest + Supertest) |
-| `npm run lint` | ESLint for backend and frontend |
-| `npm run typecheck` | `tsc --noEmit` for backend and frontend |
-| `npm run db:seed` | Reset and seed demonstration tasks |
+| Script                 | Description                                                      |
+| :--------------------- | :--------------------------------------------------------------- |
+| `npm run dev`          | Run backend and frontend together                                |
+| `npm run dev:backend`  | Run only the API (`tsx watch`)                                   |
+| `npm run dev:frontend` | Run only the Next.js dev server                                  |
+| `npm run build`        | Production build for backend (`tsc`) and frontend (`next build`) |
+| `npm test`             | Backend integration tests (Vitest + Supertest)                   |
+| `npm run lint`         | ESLint for backend and frontend                                  |
+| `npm run typecheck`    | `tsc --noEmit` for backend and frontend                          |
+| `npm run db:seed`      | Reset and seed demonstration tasks                               |
 
 From `backend/`: `npm run dev`, `build`, `start`, `test`, `lint`, `typecheck`, `db:seed`.
 
@@ -381,26 +388,26 @@ Base URL: `http://localhost:5000`
 
 All request bodies are JSON. All responses use the `success`/`data` or `success`/`error` envelope.
 
-| Method | Endpoint | Body / Query | Success | Errors |
-| :--- | :--- | :--- | :--- | :--- |
-| `GET` | `/api/tasks` | `?status=&sort=&order=&search=` | `200` | `400`, `500` |
-| `GET` | `/api/tasks/:id` | — | `200` | `400`, `404`, `500` |
-| `POST` | `/api/tasks` | `{ title, description?, priority?, dueDate? }` | `201` | `400`, `500` |
-| `PUT` | `/api/tasks/:id` | Any of `title, description, status, priority, dueDate` | `200` | `400`, `404`, `500` |
-| `PATCH` | `/api/tasks/:id/toggle` | — | `200` | `404`, `500` |
-| `DELETE` | `/api/tasks/:id` | — | `200` | `404`, `500` |
-| `GET` | `/health` | — | `200` | `503` |
-| `*` | Unknown route | — | — | `404` |
-| `*` | Malformed JSON | — | — | `400` |
+| Method   | Endpoint                | Body / Query                                           | Success | Errors              |
+| :------- | :---------------------- | :----------------------------------------------------- | :------ | :------------------ |
+| `GET`    | `/api/tasks`            | `?status=&sort=&order=&search=`                        | `200`   | `400`, `500`        |
+| `GET`    | `/api/tasks/:id`        | -                                                      | `200`   | `400`, `404`, `500` |
+| `POST`   | `/api/tasks`            | `{ title, description?, priority?, dueDate? }`         | `201`   | `400`, `500`        |
+| `PUT`    | `/api/tasks/:id`        | Any of `title, description, status, priority, dueDate` | `200`   | `400`, `404`, `500` |
+| `PATCH`  | `/api/tasks/:id/toggle` | -                                                      | `200`   | `404`, `500`        |
+| `DELETE` | `/api/tasks/:id`        | -                                                      | `200`   | `404`, `500`        |
+| `GET`    | `/health`               | -                                                      | `200`   | `503`               |
+| `*`      | Unknown route           | -                                                      | -       | `404`               |
+| `*`      | Malformed JSON          | -                                                      | -       | `400`               |
 
 ### Query parameters (`GET /api/tasks`)
 
-| Parameter | Values | Default |
-| :--- | :--- | :--- |
-| `status` | `pending` \| `completed` | all |
-| `sort` | `createdAt` \| `dueDate` \| `priority` | `createdAt` |
-| `order` | `asc` \| `desc` | `desc` |
-| `search` | string, max 100 chars | none |
+| Parameter | Values                                 | Default     |
+| :-------- | :------------------------------------- | :---------- |
+| `status`  | `pending` \| `completed`               | all         |
+| `sort`    | `createdAt` \| `dueDate` \| `priority` | `createdAt` |
+| `order`   | `asc` \| `desc`                        | `desc`      |
+| `search`  | string, max 100 chars                  | none        |
 
 `sort=priority` uses a deterministic in-memory rank (`high → medium → low`) because PostgreSQL enum ordering follows declaration order.
 
@@ -457,7 +464,10 @@ curl.exe -X DELETE http://localhost:5000/api/tasks/<id>
 ```
 
 ```json
-{ "success": true, "data": { "message": "Task deleted successfully", "id": "..." } }
+{
+  "success": true,
+  "data": { "message": "Task deleted successfully", "id": "..." }
+}
 ```
 
 **Validation error**
@@ -488,13 +498,13 @@ curl.exe -X DELETE http://localhost:5000/api/tasks/<id>
 
 Error mapping:
 
-| Condition | Status |
-| :--- | :--- |
-| Zod validation failure / invalid UUID / malformed JSON | `400` |
-| Valid UUID not found (or Prisma `P2025`) | `404` |
-| Unknown route | `404` |
-| Database unavailable (`/health`) | `503` |
-| Unhandled error | `500` (details logged server-side only) |
+| Condition                                              | Status                                  |
+| :----------------------------------------------------- | :-------------------------------------- |
+| Zod validation failure / invalid UUID / malformed JSON | `400`                                   |
+| Valid UUID not found (or Prisma `P2025`)               | `404`                                   |
+| Unknown route                                          | `404`                                   |
+| Database unavailable (`/health`)                       | `503`                                   |
+| Unhandled error                                        | `500` (details logged server-side only) |
 
 ---
 
@@ -528,17 +538,17 @@ All four commands pass on the current codebase.
 
 ## Troubleshooting
 
-| Symptom | Cause / Fix |
-| :--- | :--- |
-| `P1001: Can't reach database server` | Check `DATABASE_URL`, network/VPN, and that the Neon project is awake. Verify the host has no typos. |
-| `P1017: Server has closed the connection` | Usually SSL or pooling. Keep `?sslmode=require` and use the direct host for migrations. |
-| Migration fails with shadow database error | Use `prisma migrate deploy` (applies committed SQL) instead of `migrate dev`. |
-| `Environment variable not found: DATABASE_URL` | Ensure you run Prisma commands from `backend/` and `backend/.env` exists. |
-| Frontend shows "Failed to fetch" | Backend not running, wrong `NEXT_PUBLIC_API_URL`, or `CORS_ORIGIN` mismatch. Restart the frontend after changing `.env.local`. |
-| Port already in use | Change `PORT` in `backend/.env` (and `NEXT_PUBLIC_API_URL` if needed) or stop the conflicting process. |
-| Tests fail to connect | Create `backend/.env.test` pointing at the same database with `&schema=test`. |
-| `@prisma/client` engine errors after install | Run `npx prisma generate` inside `backend/`. |
-| Next.js and backend clock/date mismatch | Dates are formatted with an explicit `timeZone: "UTC"`; overdue detection compares UTC calendar dates. |
+| Symptom                                        | Cause / Fix                                                                                                                    |
+| :--------------------------------------------- | :----------------------------------------------------------------------------------------------------------------------------- |
+| `P1001: Can't reach database server`           | Check `DATABASE_URL`, network/VPN, and that the Neon project is awake. Verify the host has no typos.                           |
+| `P1017: Server has closed the connection`      | Usually SSL or pooling. Keep `?sslmode=require` and use the direct host for migrations.                                        |
+| Migration fails with shadow database error     | Use `prisma migrate deploy` (applies committed SQL) instead of `migrate dev`.                                                  |
+| `Environment variable not found: DATABASE_URL` | Ensure you run Prisma commands from `backend/` and `backend/.env` exists.                                                      |
+| Frontend shows "Failed to fetch"               | Backend not running, wrong `NEXT_PUBLIC_API_URL`, or `CORS_ORIGIN` mismatch. Restart the frontend after changing `.env.local`. |
+| Port already in use                            | Change `PORT` in `backend/.env` (and `NEXT_PUBLIC_API_URL` if needed) or stop the conflicting process.                         |
+| Tests fail to connect                          | Create `backend/.env.test` pointing at the same database with `&schema=test`.                                                  |
+| `@prisma/client` engine errors after install   | Run `npx prisma generate` inside `backend/`.                                                                                   |
+| Next.js and backend clock/date mismatch        | Dates are formatted with an explicit `timeZone: "UTC"`; overdue detection compares UTC calendar dates.                         |
 
 ---
 
@@ -560,9 +570,9 @@ All four commands pass on the current codebase.
 
 ## AI Assistance Disclosure
 
-As required by the assessment guidelines: AI assistance was used to help plan, scaffold, and review this project. All code was reviewed, executed, and verified locally — including database migrations, the seeded Neon database, the integration suite, linting, type-checking, and production builds. Architectural and implementation decisions remain the candidate's responsibility.
+As required by the assessment guidelines: AI assistance was used to help plan, scaffold, and review this project. All code was reviewed, executed, and verified locally - including database migrations, the seeded Neon database, the integration suite, linting, type-checking, and production builds. Architectural and implementation decisions remain the candidate's responsibility.
 
 ---
 
 **Author:** Abul Bashar
-**Assessment:** Acme AI Fellowship — Cohort 8
+**Assessment:** Acme AI Fellowship - Cohort 8
