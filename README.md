@@ -9,6 +9,7 @@ Task-Flow pairs a Next.js App Router frontend with an Express + TypeScript REST 
 ## Table of Contents
 
 - [Overview](#overview)
+- [Live Demo](#live-demo)
 - [Features](#features)
 - [Tech Stack](#tech-stack)
 - [Architecture](#architecture)
@@ -16,6 +17,7 @@ Task-Flow pairs a Next.js App Router frontend with an Express + TypeScript REST 
 - [Prerequisites](#prerequisites)
 - [Quick Start (Neon PostgreSQL)](#quick-start-neon-postgresql)
 - [Local PostgreSQL Alternative](#local-postgresql-alternative)
+- [Deployment](#deployment)
 - [Environment Variables](#environment-variables)
 - [Available Scripts](#available-scripts)
 - [Database Migrations & Seeding](#database-migrations--seeding)
@@ -37,8 +39,21 @@ Task-Flow lets a user create, edit, complete, and delete personal tasks from a r
 
 - PostgreSQL is provided by **Neon** using a direct (non-pooled) connection string. No Docker is required.
 - Any standard PostgreSQL connection string works, including a local server - this is the reviewer fallback.
-- No live deployment is claimed; the application runs locally.
+- The frontend is deployed on **Vercel** and the backend API on **Render**, both backed by PostgreSQL.
 - The database schema, migrations, and seed data are committed so an evaluator can start in a few commands.
+
+---
+
+## Live Demo
+
+| Resource            | URL                                                                              |
+| :------------------ | :------------------------------------------------------------------------------- |
+| Frontend            | <https://task-follow-mu.vercel.app>                                              |
+| Backend healthcheck | <https://task-follow.onrender.com/health>                                        |
+| Demo video          | <https://drive.google.com/file/d/1yJk9NMElhv4oe5gDJ2iG1xPLAVdS-jOq/view>         |
+
+The backend runs on Render's free tier. If the healthcheck takes a few seconds to
+respond, the instance is waking up - retry once it is warm.
 
 ---
 
@@ -140,7 +155,6 @@ All responses use one envelope:
 Task-Follow/
 ├── package.json                  # Root convenience scripts
 ├── .env.example                  # Root reference for both apps
-├── .nvmrc                        # Node v20
 ├── README.md
 │
 ├── backend/
@@ -182,9 +196,10 @@ Task-Follow/
 
 ## Prerequisites
 
-- **Node.js 20 or newer** (`.nvmrc` pins `v20`).
-- **npm** (bundled with Node).
-- A **PostgreSQL 16+** database. The recommended path is a free [Neon](https://neon.tech) project.
+- **Node.js 20 LTS or newer** (`20.x`, `22.x`, or `24.x`). Node 20 is recommended.
+- **npm 10 or newer** (bundled with Node 20+).
+- **PostgreSQL 16+**. The recommended path is a free [Neon](https://neon.tech) project, but any PostgreSQL server works.
+- **Python is not required.** Both the frontend and backend are Node.js/TypeScript projects; there are no Python dependencies or scripts.
 - Windows, macOS, or Linux. Commands below show both `cmd`/PowerShell and Unix variants where they differ.
 
 ---
@@ -279,6 +294,10 @@ curl http://localhost:5000/health         # macOS / Linux
 }
 ```
 
+To use the hosted deployment instead of local servers, open the
+[frontend](https://task-follow-mu.vercel.app) and check the
+[backend health endpoint](https://task-follow.onrender.com/health).
+
 ---
 
 ## Local PostgreSQL Alternative
@@ -312,6 +331,41 @@ DATABASE_URL="postgresql://postgres:YOUR_PASSWORD@localhost:5432/taskflow?schema
 ```
 
 The committed migration is generated SQL, so no shadow database privileges are required.
+
+---
+
+## Deployment
+
+The project is already deployed and publicly accessible:
+
+- **Frontend (Vercel):** <https://task-follow-mu.vercel.app>
+- **Backend (Render):** <https://task-follow.onrender.com> - healthcheck at <https://task-follow.onrender.com/health>
+- **Demo video:** <https://drive.google.com/file/d/1yJk9NMElhv4oe5gDJ2iG1xPLAVdS-jOq/view>
+
+To reproduce the deployment:
+
+1. **Backend (Render)**
+   - Build command: `npm install && npm run build`
+   - Start command: `npm start`
+   - Root directory: `backend`
+   - Environment variables:
+     ```env
+     DATABASE_URL="postgresql://USER:PASSWORD@HOST/neondb?sslmode=require"
+     CORS_ORIGIN="https://task-follow-mu.vercel.app"
+     NODE_ENV="production"
+     ```
+   - Run `npx prisma migrate deploy` once against the production database.
+
+2. **Frontend (Vercel)**
+   - Framework preset: Next.js
+   - Root directory: `frontend`
+   - Environment variable:
+     ```env
+     NEXT_PUBLIC_API_URL="https://task-follow.onrender.com"
+     ```
+   - Redeploy after changing `NEXT_PUBLIC_API_URL`, because it is embedded at build time.
+
+> The backend is hosted on Render's free tier, so the first request after a period of inactivity may take a few seconds while the instance wakes up.
 
 ---
 
@@ -564,7 +618,8 @@ All four commands pass on the current codebase.
 - [x] README covers Neon and local PostgreSQL setup, migrations, seed, API, tests, and troubleshooting.
 - [x] No credentials committed; `.env*` ignored; examples provided.
 - [x] Responsive layout verified from 375px.
-- [ ] Public remote created and pushed by the candidate.
+- [x] Frontend deployed to Vercel and backend deployed to Render with a live PostgreSQL database.
+- [x] Live demo and walkthrough video linked in the README.
 
 ---
 
