@@ -39,8 +39,10 @@ export const Modal: React.FC<ModalProps> = ({
     document.body.style.overflow = "hidden";
 
     const focusTimer = window.setTimeout(() => {
+      const autoFocusTarget =
+        modalRef.current?.querySelector<HTMLElement>("[data-autofocus]");
       const focusable = getFocusableElements();
-      (focusable[0] ?? modalRef.current)?.focus();
+      (autoFocusTarget ?? focusable[0] ?? modalRef.current)?.focus();
     }, 0);
 
     const handleKeyDown = (e: KeyboardEvent) => {
