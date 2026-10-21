@@ -17,7 +17,8 @@
     "lint:frontend": "npm run lint --prefix frontend",
     "typecheck": "npm run typecheck --prefix backend && npm run typecheck --prefix frontend",
     "typecheck:backend": "npm run typecheck --prefix backend",
-    "typecheck:frontend": "npm run typecheck --prefix frontend"
+    "typecheck:frontend": "npm run typecheck --prefix frontend",
+    "db:seed": "npm run db:seed --prefix backend"
   },
   "keywords": [
     "task-manager",
