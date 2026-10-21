@@ -6,6 +6,7 @@ import { env } from "./config/env.js";
 import { prisma } from "./config/prisma.js";
 import taskRoutes from "./routes/task.routes.js";
 import { sendError, sendSuccess } from "./utils/api-response.js";
+import { logger } from "./utils/logger.js";
 import { notFoundHandler } from "./middleware/not-found.middleware.js";
 import { errorHandler } from "./middleware/error.middleware.js";
 
@@ -39,6 +40,7 @@ app.get("/health", async (_req, res) => {
       200
     );
   } catch (error) {
+    logger.error("Health check failed: database connectivity error", error);
     sendError(res, 503, "Database connection unavailable", "SERVICE_UNAVAILABLE");
   }
 });

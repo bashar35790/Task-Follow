@@ -1,4 +1,4 @@
-import { beforeEach, afterAll, vi } from "vitest";
+import { beforeEach, afterAll } from "vitest";
 import { prisma } from "../src/config/prisma.js";
 
 beforeEach(async () => {
