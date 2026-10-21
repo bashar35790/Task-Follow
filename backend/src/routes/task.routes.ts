@@ -1,5 +1,12 @@
 import { Router } from "express";
-import { taskController } from "../controllers/task.controller.js";
+import {
+  createTask,
+  deleteTask,
+  getTaskById,
+  getTasks,
+  toggleTaskStatus,
+  updateTask,
+} from "../controllers/task.controller.js";
 import { validate } from "../middleware/validate.middleware.js";
 import {
   createTaskSchema,
@@ -10,41 +17,25 @@ import {
 
 const router = Router();
 
-router.get(
-  "/",
-  validate(taskQuerySchema, "query"),
-  taskController.getTasks.bind(taskController)
-);
+router.get("/", validate(taskQuerySchema, "query"), getTasks);
 
-router.post(
-  "/",
-  validate(createTaskSchema, "body"),
-  taskController.createTask.bind(taskController)
-);
+router.post("/", validate(createTaskSchema, "body"), createTask);
 
-router.get(
-  "/:id",
-  validate(taskIdParamSchema, "params"),
-  taskController.getTaskById.bind(taskController)
-);
+router.get("/:id", validate(taskIdParamSchema, "params"), getTaskById);
 
 router.put(
   "/:id",
   validate(taskIdParamSchema, "params"),
   validate(updateTaskSchema, "body"),
-  taskController.updateTask.bind(taskController)
+  updateTask
 );
 
 router.patch(
   "/:id/toggle",
   validate(taskIdParamSchema, "params"),
-  taskController.toggleTaskStatus.bind(taskController)
+  toggleTaskStatus
 );
 
-router.delete(
-  "/:id",
-  validate(taskIdParamSchema, "params"),
-  taskController.deleteTask.bind(taskController)
-);
+router.delete("/:id", validate(taskIdParamSchema, "params"), deleteTask);
 
 export default router;

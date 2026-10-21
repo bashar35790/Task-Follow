@@ -28,10 +28,10 @@ interface ApiResponse<T> {
 
 async function request<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
   const url = `${API_BASE_URL}${endpoint}`;
-  const headers = {
-    "Content-Type": "application/json",
-    ...options.headers,
-  };
+  const headers = new Headers(options.headers);
+  if (options.body != null) {
+    headers.set("Content-Type", "application/json");
+  }
 
   try {
     const res = await fetch(url, {
@@ -82,10 +82,6 @@ export const taskApi = {
     const queryString = searchParams.toString();
     const endpoint = `/api/tasks${queryString ? `?${queryString}` : ""}`;
     return request<Task[]>(endpoint, { method: "GET" });
-  },
-
-  async getById(id: string): Promise<Task> {
-    return request<Task>(`/api/tasks/${id}`, { method: "GET" });
   },
 
   async create(payload: CreateTaskInput): Promise<Task> {

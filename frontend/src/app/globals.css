@@ -5,15 +5,6 @@
 :root {
   --background: #f8fafc;
   --foreground: #0f172a;
-  --bg-surface: #ffffff;
-  --bg-surface-elevated: #ffffff;
-  --border-subtle: #e2e8f0;
-  --border-strong: #cbd5e1;
-  --accent-primary: #3b82f6;
-  --accent-primary-hover: #2563eb;
-  --accent-danger: #ef4444;
-  --accent-success: #10b981;
-  --accent-warning: #f59e0b;
 }
 
 body {

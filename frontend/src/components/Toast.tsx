@@ -1,12 +1,11 @@
 "use client";
 
 import React, { useEffect } from "react";
-import { AlertCircle, CheckCircle2, Info, X } from "lucide-react";
+import { AlertCircle, CheckCircle2, X } from "lucide-react";
 
-export type ToastType = "success" | "error" | "info";
+export type ToastType = "success" | "error";
 
 export interface ToastProps {
-  id?: string;
   message: string;
   type?: ToastType;
   onClose: () => void;
@@ -36,10 +35,6 @@ export const Toast: React.FC<ToastProps> = ({
     error: {
       bg: "bg-rose-50 border-rose-200 text-rose-900",
       icon: <AlertCircle className="h-5 w-5 text-rose-600 shrink-0" />,
-    },
-    info: {
-      bg: "bg-blue-50 border-blue-200 text-blue-900",
-      icon: <Info className="h-5 w-5 text-blue-600 shrink-0" />,
     },
   }[type];
 

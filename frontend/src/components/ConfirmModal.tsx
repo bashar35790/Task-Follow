@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { AlertTriangle, Loader2, Trash2 } from "lucide-react";
+import { AlertCircle, AlertTriangle, Loader2, Trash2 } from "lucide-react";
 import { Modal } from "./Modal";
 
 interface ConfirmModalProps {
@@ -18,17 +18,27 @@ export const ConfirmModal: React.FC<ConfirmModalProps> = ({
   taskTitle,
 }) => {
   const [isDeleting, setIsDeleting] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   useEffect(() => {
-    if (isOpen) setIsDeleting(false);
+    if (isOpen) {
+      setIsDeleting(false);
+      setErrorMessage(null);
+    }
   }, [isOpen]);
 
   const handleConfirm = async () => {
     if (isDeleting) return;
     setIsDeleting(true);
+    setErrorMessage(null);
+
     try {
       await onConfirm();
       onClose();
+    } catch (err) {
+      setErrorMessage(
+        err instanceof Error ? err.message : "Failed to delete the task. Please try again."
+      );
     } finally {
       setIsDeleting(false);
     }
@@ -49,6 +59,16 @@ export const ConfirmModal: React.FC<ConfirmModalProps> = ({
           </p>
         </div>
       </div>
+
+      {errorMessage && (
+        <div
+          className="mt-4 flex items-start gap-2.5 rounded-lg border border-rose-200 bg-rose-50 p-3 text-sm text-rose-800 animate-fade-in"
+          role="alert"
+        >
+          <AlertCircle className="h-4 w-4 shrink-0 mt-0.5 text-rose-600" />
+          <span>{errorMessage}</span>
+        </div>
+      )}
 
       <div className="flex items-center justify-end gap-2.5 mt-6">
         <button

@@ -14,21 +14,20 @@ export class TaskService {
     const where: Prisma.TaskWhereInput = {};
 
     if (query?.status) {
-      where.status = query.status as TaskStatus;
+      where.status = query.status;
     }
 
-    if (query?.search && query.search.trim()) {
-      const searchTerm = query.search.trim();
+    const searchTerm = query?.search?.trim();
+    if (searchTerm) {
       where.OR = [
         { title: { contains: searchTerm, mode: "insensitive" } },
         { description: { contains: searchTerm, mode: "insensitive" } },
       ];
     }
 
-    const sortField = query?.sort || "createdAt";
-    const sortOrder = query?.order || "desc";
+    const sortField = query?.sort ?? "createdAt";
+    const sortOrder = query?.order ?? "desc";
 
-    // If sorting by priority, apply deterministic in-memory rank
     if (sortField === "priority") {
       const tasks = await prisma.task.findMany({
         where,
@@ -36,23 +35,15 @@ export class TaskService {
       });
 
       return tasks.sort((a, b) => {
-        const rankA = PRIORITY_RANK[a.priority];
-        const rankB = PRIORITY_RANK[b.priority];
-        if (sortOrder === "asc") {
-          return rankA - rankB; // low -> medium -> high
-        }
-        return rankB - rankA; // high -> medium -> low
+        const rankDiff = PRIORITY_RANK[a.priority] - PRIORITY_RANK[b.priority];
+        return sortOrder === "asc" ? rankDiff : -rankDiff;
       });
     }
 
-    const tasks = await prisma.task.findMany({
+    return prisma.task.findMany({
       where,
-      orderBy: {
-        [sortField]: sortOrder,
-      },
+      orderBy: { [sortField]: sortOrder },
     });
-
-    return tasks;
   }
 
   async getTaskById(id: string): Promise<Task> {
@@ -68,35 +59,23 @@ export class TaskService {
   }
 
   async createTask(data: CreateTaskInput): Promise<Task> {
-    const task = await prisma.task.create({
+    return prisma.task.create({
       data: {
         title: data.title,
         description: data.description,
-        status: TaskStatus.pending,
-        priority: (data.priority as TaskPriority) || TaskPriority.medium,
+        priority: data.priority,
         dueDate: data.dueDate,
       },
     });
-
-    return task;
   }
 
   async updateTask(id: string, data: UpdateTaskInput): Promise<Task> {
     await this.getTaskById(id);
 
-    const updateData: Prisma.TaskUpdateInput = {};
-    if (data.title !== undefined) updateData.title = data.title;
-    if (data.description !== undefined) updateData.description = data.description;
-    if (data.status !== undefined) updateData.status = data.status as TaskStatus;
-    if (data.priority !== undefined) updateData.priority = data.priority as TaskPriority;
-    if (data.dueDate !== undefined) updateData.dueDate = data.dueDate;
-
-    const updatedTask = await prisma.task.update({
+    return prisma.task.update({
       where: { id },
-      data: updateData,
+      data,
     });
-
-    return updatedTask;
   }
 
   async toggleTaskStatus(id: string): Promise<Task> {
@@ -106,22 +85,18 @@ export class TaskService {
         ? TaskStatus.pending
         : TaskStatus.completed;
 
-    const updated = await prisma.task.update({
+    return prisma.task.update({
       where: { id },
       data: { status: newStatus },
     });
-
-    return updated;
   }
 
   async deleteTask(id: string): Promise<Task> {
     await this.getTaskById(id);
 
-    const deleted = await prisma.task.delete({
+    return prisma.task.delete({
       where: { id },
     });
-
-    return deleted;
   }
 }
 

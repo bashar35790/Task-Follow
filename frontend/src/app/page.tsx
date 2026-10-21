@@ -176,16 +176,9 @@ export default function DashboardPage() {
   const handleConfirmDelete = async () => {
     if (!deletingTask) return;
     const target = deletingTask;
-    try {
-      await taskApi.delete(target.id);
-      setTasks((prev) => prev.filter((task) => task.id !== target.id));
-      showToast("Task deleted successfully");
-    } catch (err) {
-      const described = describeError(err);
-      setError(described);
-      showToast(described.message, "error");
-      throw err;
-    }
+    await taskApi.delete(target.id);
+    setTasks((prev) => prev.filter((task) => task.id !== target.id));
+    showToast("Task deleted successfully");
   };
 
   return (

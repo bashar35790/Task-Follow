@@ -6,17 +6,18 @@ export const TaskPriorityEnum = z.enum(["low", "medium", "high"]);
 export const dueDateSchema = z
   .union([
     z.string().datetime(),
-    z.string().regex(/^\d{4}-\d{2}-\d{2}(T.*)?$/, "Invalid date format (expected YYYY-MM-DD or ISO 8601)"),
+    z
+      .string()
+      .regex(
+        /^\d{4}-\d{2}-\d{2}(T.*)?$/,
+        "Invalid date format (expected YYYY-MM-DD or ISO 8601)"
+      ),
   ])
   .nullable()
   .optional()
-  .transform((val) => {
-    if (val === null || val === undefined || val === "") return null;
-    const date = new Date(val);
-    if (isNaN(date.getTime())) {
-      throw new Error("Invalid date value");
-    }
-    return date;
+  .transform((val) => (val == null ? null : new Date(val)))
+  .refine((val) => val == null || !Number.isNaN(val.getTime()), {
+    message: "Invalid date value",
   });
 
 export const createTaskSchema = z
@@ -80,5 +81,4 @@ export const taskQuerySchema = z
 
 export type CreateTaskInput = z.infer<typeof createTaskSchema>;
 export type UpdateTaskInput = z.infer<typeof updateTaskSchema>;
-export type TaskIdParam = z.infer<typeof taskIdParamSchema>;
 export type TaskQueryInput = z.infer<typeof taskQuerySchema>;

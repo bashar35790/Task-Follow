@@ -1,28 +1,25 @@
 import { PrismaClient } from "@prisma/client";
+import { env } from "./env.js";
+import { logger } from "../utils/logger.js";
 
-declare global {
-  var prisma: PrismaClient | undefined;
-}
+const globalForPrisma = globalThis as unknown as { prisma?: PrismaClient };
 
 export const prisma =
-  globalThis.prisma ||
+  globalForPrisma.prisma ??
   new PrismaClient({
-    log:
-      process.env.NODE_ENV === "development"
-        ? ["warn", "error"]
-        : ["error"],
+    log: env.NODE_ENV === "development" ? ["warn", "error"] : ["error"],
   });
 
-if (process.env.NODE_ENV !== "production") {
-  globalThis.prisma = prisma;
+if (env.NODE_ENV !== "production") {
+  globalForPrisma.prisma = prisma;
 }
 
 export async function connectDatabase(): Promise<void> {
   try {
     await prisma.$connect();
-    console.log("Database connection established successfully.");
+    logger.info("Database connection established successfully.");
   } catch (error) {
-    console.error("Failed to connect to the database:", error);
+    logger.error("Failed to connect to the database", error);
     process.exit(1);
   }
 }
@@ -30,5 +27,3 @@ export async function connectDatabase(): Promise<void> {
 export async function disconnectDatabase(): Promise<void> {
   await prisma.$disconnect();
 }
-
-export default prisma;
